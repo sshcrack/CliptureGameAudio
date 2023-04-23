@@ -1,12 +1,11 @@
 #include "MinipairDescriptorFactory.h"
-#include "MicrophoneWaveProperties.h"
-#include "MicrophoneTopologyPropertiesh.h"
 
 #include "SpeakerWaveProperties.h"
 #include "SpeakerTopologyProperties.h"
 
 
 #include "MiniportTopology.h"
+#include "MiniportWaveRT.h"
 
 MinipairDescriptorFactory::MinipairDescriptorFactory()
 {
@@ -24,27 +23,6 @@ void MinipairDescriptorFactory::SetLastCharacterOfString(PWSTR string, int value
 }
 
 int MinipairDescriptorFactory::m_CurrentIndex = 0;
-ENDPOINT_MINIPAIR MinipairDescriptorFactory::m_MicrophoneTemplate =
-{
-	DeviceType::CaptureDevice,
-	L"TopologyCapture-0",                       // make sure this or the template name matches with KSNAME_TopologyMicIn in the inf's [Strings] section 
-	L"TopologyCaptureTemplate",                                   // optional template name
-	MiniportTopology::Create,
-	&MicInTopoMiniportFilterDescriptor,
-	0, NULL,                                // Interface properties
-	L"WaveCapture-0",                           // make sure this or the template name matches with KSNAME_WaveMicIn in the inf's [Strings] section
-	L"WaveCaptureTemplate",                                   // optional template name
-	MiniportWaveRT::Create,
-	&MicInWaveMiniportFilterDescriptor,
-	0, NULL,                                // Interface properties
-	MICIN_DEVICE_MAX_CHANNELS,
-	MicInPinDeviceFormatsAndModes,
-	SIZEOF_ARRAY(MicInPinDeviceFormatsAndModes),
-	MicInTopologyPhysicalConnections,
-	SIZEOF_ARRAY(MicInTopologyPhysicalConnections),
-	ENDPOINT_FLAG_NONE,
-	NULL, 0, NULL,                          // audio module settings.
-};
 
 ENDPOINT_MINIPAIR MinipairDescriptorFactory::m_SpeakerTemplate =
 {

@@ -63,14 +63,8 @@
     <ClInclude Include="KsAudioProcessingAttribute.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MiniportWaveRT.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="KsHelper.h">
       <Filter>Header Files\helper</Filter>
-    </ClInclude>
-    <ClInclude Include="MiniportWaveRTStream.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MiniportTopology.h">
       <Filter>Header Files</Filter>
@@ -82,6 +76,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="RingBuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MiniportWaveRT.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MiniportWaveRTStream.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -107,22 +107,22 @@
     <ClCompile Include="MinipairDescriptorFactory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MiniportWaveRT.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="KsHelper.cpp">
       <Filter>Source Files\helper</Filter>
-    </ClCompile>
-    <ClCompile Include="MiniportWaveRTStream.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MiniportWaveRTStreamAudioEngineNode.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MiniportTopology.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="RingBuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MiniportWaveRT.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MiniportWaveRTStream.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MiniportWaveRTStreamAudioEngineNode.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

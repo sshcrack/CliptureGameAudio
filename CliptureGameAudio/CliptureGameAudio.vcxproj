@@ -186,6 +186,8 @@
     <ClInclude Include="AdapterCommon.h" />
     <ClInclude Include="EndpointMinipair.h" />
     <ClInclude Include="Globals.h" />
+    <ClInclude Include="MiniportWaveRT.h" />
+    <ClInclude Include="MiniportWaveRTStream.h" />
     <ClInclude Include="RingBuffer.h" />
     <ClInclude Include="SpeakerTopologyProperties.h" />
     <ClInclude Include="SpeakerWaveProperties.h" />
@@ -195,8 +197,6 @@
     <ClInclude Include="Macros.h" />
     <ClInclude Include="MinipairDescriptorFactory.h" />
     <ClInclude Include="MiniportTopology.h" />
-    <ClInclude Include="MiniportWaveRT.h" />
-    <ClInclude Include="MiniportWaveRTStream.h" />
     <ClInclude Include="NewDelete.h" />
     <ClInclude Include="RegistryHelper.h" />
     <ClInclude Include="SubdeviceCache.h" />

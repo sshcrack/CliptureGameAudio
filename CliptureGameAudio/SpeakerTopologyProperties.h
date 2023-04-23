@@ -2,6 +2,7 @@
 
 #include "Globals.h"
 #include "MiniportTopology.h"
+#include "KsAudioProcessingAttribute.h"
 
 enum class TopologyRenderPins
 {

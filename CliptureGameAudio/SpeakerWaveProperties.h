@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Globals.h"
+#include "MiniportWaveRT.h"
+#include "KsAudioProcessingAttribute.h"
 
 #define SPEAKER_DEVICE_MAX_CHANNELS               2       // Max Channels.
 
