@@ -50,7 +50,7 @@ extern "C" NTSTATUS DriverEntry(
 	WDF_DRIVER_CONFIG config;
 	
 	//print hello world
-	KdPrintEx((DPFLTR_IHVDRIVER_ID, DPFLTR_INFO_LEVEL, "AudioMirror: DriverEntry\n"));
+	KdPrintEx((DPFLTR_IHVDRIVER_ID, DPFLTR_INFO_LEVEL, "CliptureGameAudio: DriverEntry\n"));
 
 	// Initialize the driver configuration object to register the
 	// entry point for the EvtDeviceAdd callback, KmdfHelloWorldEvtDeviceAdd

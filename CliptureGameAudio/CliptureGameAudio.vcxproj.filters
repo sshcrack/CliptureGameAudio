@@ -25,7 +25,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <Inf Include="AudioMirror.inf">
+    <Inf Include="CliptureGameAudio.inf">
       <Filter>Driver Files</Filter>
     </Inf>
   </ItemGroup>
