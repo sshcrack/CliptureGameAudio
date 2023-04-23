@@ -54,24 +54,6 @@ ErrorControl   = 1               ; SERVICE_ERROR_NORMAL
 ServiceBinary  = %12%\CliptureGameAudio.sys
 
 
-; ------------- Capture device
-[CliptureGameAudio.Interface.WaveCaptureTemplate]
-AddReg=CliptureGameAudio.Interface.WaveCaptureTemplate.AddReg
-
-[CliptureGameAudio.Interface.WaveCaptureTemplate.AddReg]
-HKR,,CLSID,,%KSProxy.CLSID%
-HKR,,FriendlyName,,%CliptureGameAudio.WaveCapture.FriendlyName%
-
-[CliptureGameAudio.Interface.TopologyCaptureTemplate]
-AddReg=CliptureGameAudio.Interface.TopologyCaptureTemplate.AddReg
-
-[CliptureGameAudio.Interface.TopologyCaptureTemplate.AddReg]
-HKR,,CLSID,,%KSProxy.CLSID%
-HKR,,FriendlyName,,%CliptureGameAudio.TopologyCapture.FriendlyName%
-; The following lines opt-in to pull mode.
-HKR,EP\0,%PKEY_AudioEndpoint_Association%,,%KSNODETYPE_ANY%
-HKR,EP\0,%PKEY_AudioEndpoint_Supports_EventDriven_Mode%,0x00010001,0x1
-
 ; ------------- Render device
 [CliptureGameAudio.Interface.WaveRenderTemplate]
 AddReg=CliptureGameAudio.Interface.WaveRenderTemplate.AddReg
@@ -91,13 +73,6 @@ HKR,EP\0,%PKEY_AudioEndpoint_Supports_EventDriven_Mode%,0x00010001,0x1
 
 [CliptureGameAudio_Device.NT.Interfaces]
 ; -------------- Interface template definition
-; Capture
-AddInterface=%KSCATEGORY_AUDIO%,    %KSNAME_WaveCapture%, CliptureGameAudio.Interface.WaveCaptureTemplate
-AddInterface=%KSCATEGORY_REALTIME%, %KSNAME_WaveCapture%, CliptureGameAudio.Interface.WaveCaptureTemplate
-AddInterface=%KSCATEGORY_CAPTURE%,  %KSNAME_WaveCapture%, CliptureGameAudio.Interface.WaveCaptureTemplate
-AddInterface=%KSCATEGORY_AUDIO%,    %KSNAME_TopologyCapture%, CliptureGameAudio.Interface.TopologyCaptureTemplate
-AddInterface=%KSCATEGORY_TOPOLOGY%, %KSNAME_TopologyCapture%, CliptureGameAudio.Interface.TopologyCaptureTemplate
-
 ; Render
 AddInterface=%KSCATEGORY_AUDIO%, %KSNAME_WaveRender%, CliptureGameAudio.Interface.WaveRenderTemplate
 AddInterface=%KSCATEGORY_RENDER%, %KSNAME_WaveRender%, CliptureGameAudio.Interface.WaveRenderTemplate
@@ -115,18 +90,13 @@ SPSVCINST_ASSOCSERVICE= 0x00000002
 OrganizationName="Jannes Peters / sshcrack"
 DriverDisplayName="CliptureGameAudio Drivers"
 DiskName="CliptureGameAudio Installation Disk"
-CliptureGameAudio.DeviceDesc="CliptureGameAudio Virtual Device"
+CliptureGameAudio.DeviceDesc="Clipture Game Audio"
 CliptureGameAudio.SVCDESC="CliptureGameAudio Service"
 
-CliptureGameAudio.WaveCapture.FriendlyName="CliptureGameAudio Wave Input"
-CliptureGameAudio.TopologyCapture.FriendlyName="CliptureGameAudio Topology Input"
-
-CliptureGameAudio.WaveRender.FriendlyName="CliptureGameAudio Wave Output"
-CliptureGameAudio.TopologyRender.FriendlyName="CliptureGameAudio Topology Output"
+CliptureGameAudio.WaveRender.FriendlyName="Clipture Game Audio Wave Output"
+CliptureGameAudio.TopologyRender.FriendlyName="Clipture Game Audio Topology Output"
 
 ;non-localizable
-KSNAME_WaveCapture="WaveCaptureTemplate"
-KSNAME_TopologyCapture="TopologyCaptureTemplate"
 
 KSNAME_WaveRender="WaveRenderTemplate"
 KSNAME_TopologyRender="TopologyRenderTemplate"
@@ -136,7 +106,6 @@ KSNODETYPE_ANY   = "{00000000-0000-0000-0000-000000000000}"
 KSProxy.CLSID="17CCA71B-ECD7-11D0-B908-00A0C9223196"
 KSCATEGORY_AUDIO="{6994AD04-93EF-11D0-A3CC-00A0C9223196}"
 KSCATEGORY_RENDER="{65E8773E-8F56-11D0-A3B9-00A0C9223196}"
-KSCATEGORY_CAPTURE="{65E8773D-8F56-11D0-A3B9-00A0C9223196}"
 KSCATEGORY_REALTIME ="{EB115FFC-10C8-4964-831D-6DCB02E6F23F}"
 KSCATEGORY_TOPOLOGY = "{DDA54A40-1E4C-11D1-A050-405705C10000}"
 

@@ -60,9 +60,6 @@
     <ClInclude Include="MinipairDescriptorFactory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MicrophoneWaveProperties.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="KsAudioProcessingAttribute.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -76,9 +73,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MiniportTopology.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MicrophoneTopologyPropertiesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SpeakerWaveProperties.h">

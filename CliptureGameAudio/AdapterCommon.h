@@ -14,7 +14,6 @@ class AdapterCommon : public IAdapterCommon, public CUnknown
 		SubdeviceHelper* m_pDeviceHelper;
 		PPORTCLSETWHELPER m_pPortClsEtwHelper;
 
-		NTSTATUS InstallVirtualMic(IRP* Irp, IUnknown** unknownMiniport);
 		NTSTATUS InstallVirtualSpeaker(IRP* Irp, IUnknown** unknownMiniport);
 		NTSTATUS InstallVirtualCable(IRP* irp);
 	public:

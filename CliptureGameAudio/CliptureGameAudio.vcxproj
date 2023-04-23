@@ -193,8 +193,6 @@
     <ClInclude Include="KsAudioProcessingAttribute.h" />
     <ClInclude Include="KsHelper.h" />
     <ClInclude Include="Macros.h" />
-    <ClInclude Include="MicrophoneTopologyPropertiesh.h" />
-    <ClInclude Include="MicrophoneWaveProperties.h" />
     <ClInclude Include="MinipairDescriptorFactory.h" />
     <ClInclude Include="MiniportTopology.h" />
     <ClInclude Include="MiniportWaveRT.h" />

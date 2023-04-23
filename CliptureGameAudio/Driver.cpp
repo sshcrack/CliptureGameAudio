@@ -226,6 +226,8 @@ NTSTATUS StartDevice
 	  NT status code.
 
 	--*/
+
+
 	UNREFERENCED_PARAMETER(ResourceList);
 
 	PAGED_CODE();

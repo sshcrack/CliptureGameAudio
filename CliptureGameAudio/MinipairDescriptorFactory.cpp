@@ -91,29 +91,3 @@ NTSTATUS MinipairDescriptorFactory::CreateSpeaker(_Outptr_ ENDPOINT_MINIPAIR** p
 	RtlCopyMemory(pNewMinipair, &m_MicrophoneTemplate, sizeof(ENDPOINT_MINIPAIR));
 	*/
 }
-
-NTSTATUS MinipairDescriptorFactory::CreateMicrophone(_Outptr_ ENDPOINT_MINIPAIR** pMinipair)
-{
-	ENDPOINT_MINIPAIR* pNewMinipair = new(NonPagedPoolNx, MINIADAPTER_POOLTAG) ENDPOINT_MINIPAIR;
-	if (!pNewMinipair) 
-	{
-		*pMinipair = NULL;
-		return STATUS_INSUFFICIENT_RESOURCES;
-	}
-	*pNewMinipair = m_MicrophoneTemplate;
-
-	MinipairDescriptorFactory::SetLastCharacterOfString(pNewMinipair->TopoName, m_CurrentIndex);
-	MinipairDescriptorFactory::SetLastCharacterOfString(pNewMinipair->WaveName, m_CurrentIndex);
-	//TODO: check if correct
-
-	*pMinipair = pNewMinipair;
-	m_CurrentIndex = m_CurrentIndex + 1;
-
-	return STATUS_SUCCESS;
-	/*
-	ENDPOINT_MINIPAIR* pNewMinipair = (ENDPOINT_MINIPAIR*)ExAllocatePoolWithTag(NonPagedPoolNx, sizeof(ENDPOINT_MINIPAIR), MINIADAPTER_POOLTAG);
-	RtlCopyMemory(pNewMinipair, &m_MicrophoneTemplate, sizeof(ENDPOINT_MINIPAIR));
-	*/
-}
-
-
