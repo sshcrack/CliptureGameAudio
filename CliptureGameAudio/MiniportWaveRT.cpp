@@ -411,7 +411,6 @@ NTSTATUS MiniportWaveRT::StreamCreated
 {
 	PAGED_CODE();
 
-	MiniportWaveRTStream**	streams = NULL;
 	ULONG                   count = 0;
 
 	DPF_ENTER(("[CMiniportWaveRT::StreamCreated]"));
@@ -419,28 +418,14 @@ NTSTATUS MiniportWaveRT::StreamCreated
 	if (IsSystemCapturePin(_Pin))
 	{
 		m_ulSystemAllocated++;
-		streams = m_SystemStreams;
 		count = m_ulMaxSystemStreams;
 		if (IsRenderDevice()) { DPF(D_TERSE, ("SPEAKER: Created %u th system capture stream.", m_ulSystemAllocated)); }
 		else { DPF(D_TERSE, ("MIC: Created %u th system capture stream.", m_ulSystemAllocated)); }
-
-		if (m_ulSystemAllocated == 1 && m_pPairedMiniport && m_pPairedMiniport->m_ulSystemAllocated == 1)
-		{
-			_Stream->SetPairedStream(m_pPairedMiniport->m_SystemStreams[0]);
-			m_pPairedMiniport->m_SystemStreams[0]->SetPairedStream(_Stream);
-		}
 	}
 	else if (IsSystemRenderPin(_Pin))
 	{
 		m_ulSystemAllocated++;
-		streams = m_SystemStreams;
 		count = m_ulMaxSystemStreams;
-
-		if (m_ulSystemAllocated == 1 && m_pPairedMiniport && m_pPairedMiniport->m_ulSystemAllocated == 1)
-		{
-			_Stream->SetPairedStream(m_pPairedMiniport->m_SystemStreams[0]);
-			m_pPairedMiniport->m_SystemStreams[0]->SetPairedStream(_Stream);
-		}
 
 		if (IsRenderDevice()) { DPF(D_TERSE, ("SPEAKER: Created %u th system render stream.", m_ulSystemAllocated)); }
 		else { DPF(D_TERSE, ("MIC: Created %u th system render stream.", m_ulSystemAllocated)); }
@@ -451,22 +436,6 @@ NTSTATUS MiniportWaveRT::StreamCreated
 		else { DPF(D_TERSE, ("MIC: Created pin %n stream with type: %n.", _Pin, (int)GetPinTypeForPinNum(_Pin))); }
 	}
 
-	//
-	// Cache this stream's ptr.
-	//
-	if (streams != NULL)
-	{
-		ULONG i = 0;
-		for (; i < count; ++i)
-		{
-			if (streams[i] == NULL)
-			{
-				streams[i] = _Stream;
-				break;
-			}
-		}
-		ASSERT(i != count);
-	}
 
 	return STATUS_SUCCESS;
 }
@@ -492,19 +461,6 @@ MiniportWaveRT::StreamClosed
 		m_ulSystemAllocated--;
 		streams = m_SystemStreams;
 		count = m_ulMaxSystemStreams;
-
-		if (m_pPairedMiniport && m_pPairedMiniport->m_ulSystemAllocated > 1)
-		{
-			ULONG i = 0;
-			for (; i < m_pPairedMiniport->m_ulMaxSystemStreams; ++i)
-			{
-				if (m_pPairedMiniport->m_SystemStreams[i] != NULL)
-				{
-					streams[i]->SetPairedStream(NULL);
-					break;
-				}
-			}
-		}
 	}
 
 	//
@@ -626,27 +582,6 @@ Return Value:
 	return STATUS_INVALID_PARAMETER;
 } // NonDelegatingQueryInterface
 
-void MiniportWaveRT::SetPairedMiniport(MiniportWaveRT* miniport)
-{
-	//clear all current pairs
-	if (m_pPairedMiniport) 
-	{
-		if (m_pPairedMiniport->m_SystemStream) m_pPairedMiniport->m_SystemStream->SetPairedStream(NULL);
-		m_pPairedMiniport->m_pPairedMiniport = NULL;
-	}
-	if (m_SystemStream) m_SystemStream->SetPairedStream(NULL);
-	m_pPairedMiniport = NULL;
-
-	//setup new pairs
-	m_pPairedMiniport = miniport;
-	if (m_pPairedMiniport) m_pPairedMiniport->m_pPairedMiniport = this;
-	if (m_pPairedMiniport->m_SystemStream && m_SystemStream)
-	{
-		m_SystemStream->SetPairedStream(m_pPairedMiniport->m_SystemStream);
-		m_pPairedMiniport->m_SystemStream->SetPairedStream(m_SystemStream);
-	}
-}
-
 /*
   Return mode information for a given pin.
 
@@ -743,11 +678,6 @@ MiniportWaveRT::~MiniportWaveRT()
 	PAGED_CODE();
 
 	DPF_ENTER(("[CMiniportWaveRT::~CMiniportWaveRT]"));
-
-	if (m_pPairedMiniport)
-	{
-		SetPairedMiniport(NULL);
-	}
 
 	if (m_SystemStreams)
 	{

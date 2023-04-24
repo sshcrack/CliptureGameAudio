@@ -78,11 +78,6 @@ Return Value:
 		ExFreePoolWithTag(m_pWfExt, MINWAVERTSTREAM_POOLTAG);
 		m_pWfExt = NULL;
 	}
-	if (m_RingBuffer)
-	{
-		ExFreePoolWithTag(m_RingBuffer, MINWAVERTSTREAM_POOLTAG);
-		m_RingBuffer = NULL;
-	}
 	if (m_pNotificationTimer)
 	{
 		ExDeleteTimer
@@ -96,10 +91,6 @@ Return Value:
 		// DPCs to complete before we free the notification DPC.
 		//
 		KeFlushQueuedDpcs();
-	}
-	if (m_PairedStream) {
-		m_PairedStream->SetPairedStream(NULL);
-		m_PairedStream = NULL;
 	}
 	DPF_ENTER(("[MiniportWaveRTStream::~MiniportWaveRTStream]"));
 } // ~MiniportWaveRTStream
@@ -403,9 +394,6 @@ NTSTATUS MiniportWaveRTStream::AllocateBufferWithNotification
 	m_ulDmaBufferSize = RequestedSize_;
 	ulBufferDurationMs = (RequestedSize_ * 1000) / m_ulDmaMovementRate;
 	m_ulNotificationIntervalMs = ulBufferDurationMs / NotificationCount_;
-
-	m_RingBuffer = new(NonPagedPoolNx, MINWAVERTSTREAM_POOLTAG)RingBuffer;
-	m_RingBuffer->Init(m_ulDmaBufferSize * 4, m_pWfExt->Format.nBlockAlign);
 
 	*AudioBufferMdl_ = pBufferMdl;
 	*ActualSize_ = RequestedSize_;
@@ -1032,7 +1020,6 @@ NTSTATUS MiniportWaveRTStream::SetState
 		
 		ullPerfCounterTemp = KeQueryPerformanceCounter(&m_ullPerformanceCounterFrequency);
 		m_ullLastDPCTimeStamp = m_ullDmaTimeStamp = KSCONVERT_PERFORMANCE_TIME(m_ullPerformanceCounterFrequency.QuadPart, ullPerfCounterTemp);
-		m_RingBuffer->Clear();
 
 		if (m_ulNotificationIntervalMs > 0)
 		{
@@ -1061,38 +1048,10 @@ NTSTATUS MiniportWaveRTStream::SetState
 		return ntStatus;
 }
 
-#pragma code_seg("PAGE")
-void MiniportWaveRTStream::SetPairedStream(MiniportWaveRTStream* stream)
-{
-	PAGED_CODE();
-	if (m_RingBuffer) m_RingBuffer->Clear();
-	m_PairedStream = stream;
-}
-
 #pragma code_seg()
 NTSTATUS MiniportWaveRTStream::WriteAudioPacket(BYTE* buffer, ULONG packetSize, BOOL eos)
 {
-	UNREFERENCED_PARAMETER(buffer);
-	UNREFERENCED_PARAMETER(packetSize);
-	UNREFERENCED_PARAMETER(eos);
-
-	//only allowed on capture stream
-	if (!m_bCapture) return STATUS_NOT_IMPLEMENTED;
-	//if we dont have a paired stream this is not allowed
-	if (m_PairedStream == NULL) return STATUS_INVALID_DEVICE_STATE;
-	if (m_RingBuffer == NULL) return STATUS_DEVICE_NOT_READY;
-	if (packetSize > m_RingBuffer->GetSize()) return STATUS_BUFFER_TOO_SMALL;
-
-	NTSTATUS state = m_RingBuffer->Put(buffer, packetSize);
-	switch (state)
-	{
-	case STATUS_BUFFER_TOO_SMALL:
-		return state;
-	case STATUS_BUFFER_OVERFLOW:
-	default:
-		return STATUS_SUCCESS;
-		break;
-	}
+	return STATUS_SUCCESS;
 }
 
 //=============================================================================
@@ -1232,24 +1191,6 @@ ByteDisplacement - # of bytes to process.
 
 --*/
 {
-	ULONG bufferOffset = m_ullLinearPosition % m_ulDmaBufferSize;
-
-	// Normally this will loop no more than once for a single wrap, but if
-	// many bytes have been displaced then this may loops many times.
-	while (ByteDisplacement > 0)
-	{
-		ULONG runWrite = min(ByteDisplacement, m_ulDmaBufferSize - bufferOffset);
-		SIZE_T actuallyWritten;
-		
-		m_RingBuffer->Take(m_pDmaBuffer + bufferOffset, runWrite, &actuallyWritten);
-		if (actuallyWritten < runWrite)
-		{
-			RtlZeroMemory(m_pDmaBuffer + bufferOffset + actuallyWritten, runWrite - actuallyWritten);
-		}
-		
-		bufferOffset = (bufferOffset + runWrite) % m_ulDmaBufferSize;
-		ByteDisplacement -= runWrite;
-	}
 }
 
 //=============================================================================
@@ -1270,17 +1211,6 @@ ByteDisplacement - # of bytes to process.
 
 --*/
 {
-	ULONG bufferOffset = m_ullLinearPosition % m_ulDmaBufferSize;
-
-	// Normally this will loop no more than once for a single wrap, but if
-	// many bytes have been displaced then this may loops many times.
-	while (ByteDisplacement > 0)
-	{
-		ULONG runWrite = min(ByteDisplacement, m_ulDmaBufferSize - bufferOffset);
-		if (m_PairedStream) m_PairedStream->WriteAudioPacket(m_pDmaBuffer + bufferOffset, runWrite, false);
-		bufferOffset = (bufferOffset + runWrite) % m_ulDmaBufferSize;
-		ByteDisplacement -= runWrite;
-	}
 }
 
 //=============================================================================

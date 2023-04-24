@@ -73,7 +73,6 @@ public:
 
 	NTSTATUS MiniportWaveRT::StreamClosed(ULONG pin, MiniportWaveRTStream* stream);
 	NTSTATUS MiniportWaveRT::StreamCreated(_In_ ULONG _Pin, _In_ MiniportWaveRTStream* _Stream);
-	void SetPairedMiniport(MiniportWaveRT* miniport);
 	BOOL IsSystemRenderPin(ULONG nPinId);
 	BOOL IsSystemCapturePin(ULONG nPinId);
 	BOOL IsBridgePin(ULONG nPinId);

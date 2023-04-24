@@ -117,8 +117,8 @@ protected:
 	KSPIN_LOCK                  m_PositionSpinLock;
 	ULONG                       m_AudioModuleCount;
 
-	MiniportWaveRTStream*		m_PairedStream;
-	RingBuffer*					m_RingBuffer;
+	//MiniportWaveRTStream*		m_PairedStream;
+	//RingBuffer*					m_RingBuffer;
 public:
 
 	NTSTATUS GetVolumeChannelCount
@@ -226,8 +226,6 @@ public:
 	(
 		_In_ PPCPROPERTY_REQUEST PropertyRequest
 	);
-
-	void SetPairedStream(MiniportWaveRTStream* stream);
 private:
 
 	//
